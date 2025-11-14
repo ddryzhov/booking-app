@@ -1,0 +1,34 @@
+databaseChangeLog:
+  - changeSet:
+      id: 07-insert-roles
+      author: daniil
+      changes:
+        - insert:
+            tableName: roles
+            columns:
+              - column:
+                  name: name
+                  value: ROLE_CUSTOMER
+              - column:
+                  name: description
+                  value: "Regular customer"
+
+        - insert:
+            tableName: roles
+            columns:
+              - column:
+                  name: name
+                  value: ROLE_MANAGER
+              - column:
+                  name: description
+                  value: "Manager with extended permissions"
+
+        - insert:
+            tableName: roles
+            columns:
+              - column:
+                  name: name
+                  value: ROLE_ADMIN
+              - column:
+                  name: description
+                  value: "Administrator"

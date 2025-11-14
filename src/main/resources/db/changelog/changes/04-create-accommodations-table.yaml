@@ -1,0 +1,102 @@
+databaseChangeLog:
+  - changeSet:
+      id: 04-create-accommodations-table
+      author: daniil
+      changes:
+        - createTable:
+            tableName: accommodations
+            columns:
+              - column:
+                  name: id
+                  type: BIGINT
+                  autoIncrement: true
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: type
+                  type: VARCHAR(50)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: location
+                  type: VARCHAR(200)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: size
+                  type: VARCHAR(50)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: amenities
+                  type: TEXT
+                  defaultValue: ''
+              - column:
+                  name: daily_rate
+                  type: NUMERIC(10,2)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: availability
+                  type: INTEGER
+                  constraints:
+                    nullable: false
+              - column:
+                  name: is_deleted
+                  type: BOOLEAN
+                  defaultValueBoolean: false
+                  constraints:
+                    nullable: false
+              - column:
+                  name: created_at
+                  type: TIMESTAMP
+                  defaultValueComputed: CURRENT_TIMESTAMP
+                  constraints:
+                    nullable: false
+              - column:
+                  name: updated_at
+                  type: TIMESTAMP
+                  defaultValueComputed: CURRENT_TIMESTAMP
+                  constraints:
+                    nullable: false
+
+        - sql:
+            sql: >
+              ALTER TABLE accommodations 
+              ADD CONSTRAINT chk_accommodations_daily_rate_positive 
+              CHECK (daily_rate > 0)
+
+        - sql:
+            sql: >
+              ALTER TABLE accommodations 
+              ADD CONSTRAINT chk_accommodations_availability_non_negative 
+              CHECK (availability >= 0)
+
+        - createIndex:
+            indexName: idx_accommodations_type
+            tableName: accommodations
+            columns:
+              - column:
+                  name: type
+
+        - createIndex:
+            indexName: idx_accommodations_location
+            tableName: accommodations
+            columns:
+              - column:
+                  name: location
+
+        - createIndex:
+            indexName: idx_accommodations_is_deleted
+            tableName: accommodations
+            columns:
+              - column:
+                  name: is_deleted
+
+        - createIndex:
+            indexName: idx_accommodations_availability
+            tableName: accommodations
+            columns:
+              - column:
+                  name: availability

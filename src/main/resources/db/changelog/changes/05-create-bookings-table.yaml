@@ -1,0 +1,128 @@
+databaseChangeLog:
+  - changeSet:
+      id: 05-create-bookings-table
+      author: daniil
+      changes:
+        - createTable:
+            tableName: bookings
+            columns:
+              - column:
+                  name: id
+                  type: BIGINT
+                  autoIncrement: true
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: check_in_date
+                  type: DATE
+                  constraints:
+                    nullable: false
+              - column:
+                  name: check_out_date
+                  type: DATE
+                  constraints:
+                    nullable: false
+              - column:
+                  name: accommodation_id
+                  type: BIGINT
+                  constraints:
+                    nullable: false
+              - column:
+                  name: user_id
+                  type: BIGINT
+                  constraints:
+                    nullable: false
+              - column:
+                  name: status
+                  type: VARCHAR(20)
+                  defaultValue: 'PENDING'
+                  constraints:
+                    nullable: false
+              - column:
+                  name: total_price
+                  type: NUMERIC(10,2)
+              - column:
+                  name: created_at
+                  type: TIMESTAMP
+                  defaultValueComputed: CURRENT_TIMESTAMP
+                  constraints:
+                    nullable: false
+              - column:
+                  name: updated_at
+                  type: TIMESTAMP
+                  defaultValueComputed: CURRENT_TIMESTAMP
+                  constraints:
+                    nullable: false
+
+        - addForeignKeyConstraint:
+            baseTableName: bookings
+            baseColumnNames: accommodation_id
+            constraintName: fk_bookings_accommodation
+            referencedTableName: accommodations
+            referencedColumnNames: id
+
+        - addForeignKeyConstraint:
+            baseTableName: bookings
+            baseColumnNames: user_id
+            constraintName: fk_bookings_user
+            referencedTableName: users
+            referencedColumnNames: id
+
+        - sql:
+            sql: >
+              ALTER TABLE bookings 
+              ADD CONSTRAINT chk_bookings_dates_valid 
+              CHECK (check_out_date > check_in_date)
+
+        - sql:
+            sql: >
+              ALTER TABLE bookings 
+              ADD CONSTRAINT chk_bookings_total_price_positive 
+              CHECK (total_price IS NULL OR total_price > 0)
+
+        - createIndex:
+            indexName: idx_bookings_accommodation_id
+            tableName: bookings
+            columns:
+              - column:
+                  name: accommodation_id
+
+        - createIndex:
+            indexName: idx_bookings_user_id
+            tableName: bookings
+            columns:
+              - column:
+                  name: user_id
+
+        - createIndex:
+            indexName: idx_bookings_status
+            tableName: bookings
+            columns:
+              - column:
+                  name: status
+
+        - createIndex:
+            indexName: idx_bookings_check_in_date
+            tableName: bookings
+            columns:
+              - column:
+                  name: check_in_date
+
+        - createIndex:
+            indexName: idx_bookings_check_out_date
+            tableName: bookings
+            columns:
+              - column:
+                  name: check_out_date
+
+        - createIndex:
+            indexName: idx_bookings_accommodation_dates
+            tableName: bookings
+            columns:
+              - column:
+                  name: accommodation_id
+              - column:
+                  name: check_in_date
+              - column:
+                  name: check_out_date

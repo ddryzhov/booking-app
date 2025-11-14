@@ -1,0 +1,123 @@
+databaseChangeLog:
+  - changeSet:
+      id: 06-create-payments-table
+      author: daniil
+      changes:
+        - createTable:
+            tableName: payments
+            columns:
+              - column:
+                  name: id
+                  type: BIGINT
+                  autoIncrement: true
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: status
+                  type: VARCHAR(20)
+                  defaultValue: 'PENDING'
+                  constraints:
+                    nullable: false
+              - column:
+                  name: booking_id
+                  type: BIGINT
+                  constraints:
+                    nullable: false
+              - column:
+                  name: user_id
+                  type: BIGINT
+                  constraints:
+                    nullable: false
+              - column:
+                  name: session_url
+                  type: VARCHAR(500)
+              - column:
+                  name: session_id
+                  type: VARCHAR(100)
+              - column:
+                  name: amount_to_pay
+                  type: NUMERIC(10,2)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: stripe_payment_intent_id
+                  type: VARCHAR(100)
+              - column:
+                  name: created_at
+                  type: TIMESTAMP
+                  defaultValueComputed: CURRENT_TIMESTAMP
+                  constraints:
+                    nullable: false
+              - column:
+                  name: updated_at
+                  type: TIMESTAMP
+                  defaultValueComputed: CURRENT_TIMESTAMP
+                  constraints:
+                    nullable: false
+              - column:
+                  name: expires_at
+                  type: TIMESTAMP
+              - column:
+                  name: paid_at
+                  type: TIMESTAMP
+
+        - addForeignKeyConstraint:
+            baseTableName: payments
+            baseColumnNames: booking_id
+            constraintName: fk_payments_booking
+            referencedTableName: bookings
+            referencedColumnNames: id
+
+        - addForeignKeyConstraint:
+            baseTableName: payments
+            baseColumnNames: user_id
+            constraintName: fk_payments_user
+            referencedTableName: users
+            referencedColumnNames: id
+
+        - addUniqueConstraint:
+            tableName: payments
+            columnNames: booking_id
+            constraintName: uc_payments_booking
+
+        - sql:
+            sql: >
+              ALTER TABLE payments 
+              ADD CONSTRAINT chk_payments_amount_positive 
+              CHECK (amount_to_pay > 0)
+
+        - createIndex:
+            indexName: idx_payments_booking_id
+            tableName: payments
+            columns:
+              - column:
+                  name: booking_id
+
+        - createIndex:
+            indexName: idx_payments_user_id
+            tableName: payments
+            columns:
+              - column:
+                  name: user_id
+
+        - createIndex:
+            indexName: idx_payments_status
+            tableName: payments
+            columns:
+              - column:
+                  name: status
+
+        - createIndex:
+            indexName: idx_payments_session_id
+            tableName: payments
+            columns:
+              - column:
+                  name: session_id
+
+        - createIndex:
+            indexName: idx_payments_expires_at
+            tableName: payments
+            columns:
+              - column:
+                  name: expires_at
