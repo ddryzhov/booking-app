@@ -70,6 +70,24 @@ public class GlobalExceptionHandler {
         );
     }
 
+    @ExceptionHandler({
+            BookingException.class,
+            BookingNotAvailableException.class,
+            BookingOverlapException.class,
+            PendingPaymentException.class
+    })
+    public ResponseEntity<ErrorResponse> handleBookingException(
+            RuntimeException ex,
+            HttpServletRequest request
+    ) {
+        return buildErrorResponse(
+                HttpStatus.BAD_REQUEST,
+                ex.getMessage(),
+                request.getRequestURI(),
+                null
+        );
+    }
+
     @ExceptionHandler(MethodArgumentNotValidException.class)
     public ResponseEntity<ErrorResponse> handleValidationException(
             MethodArgumentNotValidException ex,
