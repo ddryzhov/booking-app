@@ -79,11 +79,4 @@ public class UserServiceImpl implements UserService {
         user.setLastLogin(LocalDateTime.now());
         userRepository.save(user);
     }
-
-    @Transactional(readOnly = true)
-    public User findByEmail(String email) {
-        return userRepository.findByEmailWithRoles(email)
-                .orElseThrow(() -> new EntityNotFoundException("User not found with email: "
-                        + email));
-    }
 }

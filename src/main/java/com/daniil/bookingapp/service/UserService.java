@@ -16,6 +16,4 @@ public interface UserService {
     UserResponseDto updateUserRole(Long userId, UpdateUserRoleRequestDto requestDto);
 
     void updateLastLogin(User user);
-
-    User findByEmail(String email);
 }

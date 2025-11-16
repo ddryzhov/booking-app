@@ -5,6 +5,7 @@ import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -74,7 +75,7 @@ public class Accommodation {
     @NotNull
     @Builder.Default
     @Column(name = "is_deleted", nullable = false)
-    private boolean isDeleted = false;
+    private boolean deleted = false;
 
     @CreationTimestamp
     @Column(name = "created_at", updatable = false)
@@ -84,12 +85,12 @@ public class Accommodation {
     @Column(name = "updated_at")
     private LocalDateTime updatedAt;
 
-    @OneToMany(mappedBy = "accommodation", fetch = jakarta.persistence.FetchType.LAZY)
+    @OneToMany(mappedBy = "accommodation", fetch = FetchType.LAZY)
     @Builder.Default
     private List<Booking> bookings = new ArrayList<>();
 
     public boolean isAvailable() {
-        return availability > 0 && !isDeleted;
+        return availability > 0 && !deleted;
     }
 
     public void decreaseAvailability() {
