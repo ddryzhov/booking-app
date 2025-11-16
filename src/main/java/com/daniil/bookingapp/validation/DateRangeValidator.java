@@ -5,7 +5,6 @@ import jakarta.validation.ConstraintValidator;
 import jakarta.validation.ConstraintValidatorContext;
 
 public class DateRangeValidator implements ConstraintValidator<ValidDateRange, BookingRequestDto> {
-
     @Override
     public boolean isValid(BookingRequestDto dto, ConstraintValidatorContext context) {
         if (dto.getCheckInDate() == null || dto.getCheckOutDate() == null) {

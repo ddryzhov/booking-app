@@ -40,7 +40,6 @@ import org.hibernate.annotations.UpdateTimestamp;
 @SQLRestriction("is_deleted = false")
 @Table(name = "accommodations")
 public class Accommodation {
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;

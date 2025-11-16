@@ -37,7 +37,6 @@ import org.hibernate.annotations.UpdateTimestamp;
 @ToString(exclude = {"user", "accommodation", "payment"})
 @Table(name = "bookings")
 public class Booking {
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
