@@ -16,5 +16,13 @@ jobs:
           distribution: 'temurin'
           cache: 'maven'
 
+      - name: Set up environment variables
+        run: |
+          echo "DB_URL=${{ secrets.DB_URL }}" >> $GITHUB_ENV
+          echo "DB_USERNAME=${{ secrets.DB_USERNAME }}" >> $GITHUB_ENV
+          echo "DB_PASSWORD=${{ secrets.DB_PASSWORD }}" >> $GITHUB_ENV
+          echo "JWT_SECRET=${{ secrets.JWT_SECRET }}" >> $GITHUB_ENV
+          echo "JWT_EXPIRATION=${{ secrets.JWT_EXPIRATION }}" >> $GITHUB_ENV
+
       - name: Build with Maven
         run: mvn --batch-mode --update-snapshots verify
