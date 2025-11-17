@@ -91,14 +91,6 @@ public class Payment {
         return status == PaymentStatus.PENDING;
     }
 
-    public boolean isPaid() {
-        return status == PaymentStatus.PAID;
-    }
-
-    public boolean isCanceled() {
-        return status == PaymentStatus.CANCELED;
-    }
-
     public void markAsPaid() {
         if (status != PaymentStatus.PENDING) {
             throw new IllegalStateException("Only pending payments can be marked as paid");
@@ -112,12 +104,5 @@ public class Payment {
             throw new IllegalStateException("Only pending payments can expire");
         }
         this.status = PaymentStatus.EXPIRED;
-    }
-
-    public void markAsCanceled() {
-        if (status != PaymentStatus.PENDING) {
-            throw new IllegalStateException("Only pending payments can be canceled");
-        }
-        this.status = PaymentStatus.CANCELED;
     }
 }

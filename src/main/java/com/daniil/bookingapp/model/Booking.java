@@ -102,17 +102,6 @@ public class Booking {
         return isActive() && checkInDate.isAfter(LocalDate.now());
     }
 
-    public boolean isExpired() {
-        return status == BookingStatus.EXPIRED
-                || (checkOutDate != null && checkOutDate.isBefore(LocalDate.now()));
-    }
-
-    public boolean overlapsWith(LocalDate checkIn, LocalDate checkOut) {
-        return isActive()
-                && checkInDate.isBefore(checkOut)
-                && checkOutDate.isAfter(checkIn);
-    }
-
     public void confirm() {
         if (status != BookingStatus.PENDING) {
             throw new IllegalStateException("Only pending bookings can be confirmed");

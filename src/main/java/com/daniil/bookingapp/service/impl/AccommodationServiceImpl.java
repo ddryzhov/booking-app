@@ -10,6 +10,7 @@ import com.daniil.bookingapp.model.Booking;
 import com.daniil.bookingapp.model.enums.AccommodationType;
 import com.daniil.bookingapp.repository.AccommodationRepository;
 import com.daniil.bookingapp.service.AccommodationService;
+import com.daniil.bookingapp.service.NotificationService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -21,12 +22,16 @@ import org.springframework.transaction.annotation.Transactional;
 public class AccommodationServiceImpl implements AccommodationService {
     private final AccommodationRepository accommodationRepository;
     private final AccommodationMapper accommodationMapper;
+    private final NotificationService notificationService;
 
     @Override
     @Transactional
     public AccommodationResponseDto create(AccommodationRequestDto requestDto) {
         Accommodation accommodation = accommodationMapper.toEntity(requestDto);
         Accommodation saved = accommodationRepository.save(accommodation);
+
+        notificationService.sendAccommodationCreatedNotification(saved);
+
         return accommodationMapper.toDto(saved);
     }
 

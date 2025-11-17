@@ -1,6 +1,5 @@
 package com.daniil.bookingapp.model;
 
-import com.daniil.bookingapp.model.enums.RoleName;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -139,10 +138,5 @@ public class User implements UserDetails {
 
     public String getFullName() {
         return String.format("%s %s", firstName, lastName);
-    }
-
-    public boolean hasRole(RoleName roleName) {
-        return roles.stream()
-                .anyMatch(role -> role.getName() == roleName);
     }
 }

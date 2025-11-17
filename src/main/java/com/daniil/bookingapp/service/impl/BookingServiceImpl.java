@@ -17,6 +17,7 @@ import com.daniil.bookingapp.model.enums.RoleName;
 import com.daniil.bookingapp.repository.BookingRepository;
 import com.daniil.bookingapp.service.AccommodationService;
 import com.daniil.bookingapp.service.BookingService;
+import com.daniil.bookingapp.service.NotificationService;
 import java.time.LocalDate;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
@@ -30,6 +31,7 @@ import org.springframework.transaction.annotation.Transactional;
 public class BookingServiceImpl implements BookingService {
     private final BookingRepository bookingRepository;
     private final AccommodationService accommodationService;
+    private final NotificationService notificationService;
     private final BookingMapper bookingMapper;
 
     @Override
@@ -72,6 +74,8 @@ public class BookingServiceImpl implements BookingService {
         booking.setTotalPrice(booking.calculateTotalPrice());
         accommodation.decreaseAvailability();
         Booking saved = bookingRepository.save(booking);
+
+        notificationService.sendBookingCreatedNotification(saved);
 
         return bookingMapper.toDto(saved);
     }
@@ -177,6 +181,8 @@ public class BookingServiceImpl implements BookingService {
         booking.cancel();
         booking.getAccommodation().increaseAvailability();
         bookingRepository.save(booking);
+
+        notificationService.sendBookingCancelledNotification(booking);
     }
 
     @Override
